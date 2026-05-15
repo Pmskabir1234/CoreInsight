@@ -1,11 +1,11 @@
-# Innovexa - Smart AI Assistant for Technical Decision-Making
+# CoreInsight - Smart AI Assistant for Technical Decision-Making
 
-Innovexa is a production-style AI engineering copilot for rotating machines (motors, pumps, industrial drives).  
+CoreInsight is a production-style AI engineering copilot for rotating machines (motors, pumps, industrial drives).  
 It combines machine learning, rule-based diagnostics, trend intelligence, and deterministic explainability to provide technical recommendations.
 
 ## 1) Project Overview
 
-Innovexa monitors multi-parameter machine telemetry and assists engineers in:
+CoreInsight monitors multi-parameter machine telemetry and assists engineers in:
 - anomaly detection
 - failure risk prediction
 - root-cause reasoning
@@ -22,7 +22,7 @@ Industrial systems produce high-volume telemetry, but teams often lack a unified
 
 ## 3) Solution
 
-Innovexa delivers an end-to-end decision support stack:
+CoreInsight delivers an end-to-end decision support stack:
 - FastAPI backend for analytics APIs
 - ML pipeline (Isolation Forest + RandomForestClassifier)
 - local explainability engine with ranked contributors + root-cause synthesis
@@ -122,7 +122,8 @@ This guarantees explainability without cloud AI dependencies.
 
 ## 9) Screenshots
 
-Add screenshots here after running:
+<img width="1919" height="953" alt="Screenshot 2026-05-07 155804" src="https://github.com/user-attachments/assets/7f4bf7b9-71f1-44f1-a6fd-a4a3dd175cc9" />
+
 - main dashboard (cards + gauges)
 - trend charts with threshold bands
 - diagnostics table
