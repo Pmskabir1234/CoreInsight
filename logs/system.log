@@ -28,3 +28,6 @@
 2026-05-16 20:02:08,571 INFO backend.ml.ml_flow model_trained name=KNeighbors accuracy=0.7600
 2026-05-16 20:02:09,805 INFO backend.ml.ml_flow saved_comparison_plot path=models\model_accuracy_comparison.png
 2026-05-16 20:02:09,813 INFO backend.ml.ml_flow best_model_selected name=GradientBoosting accuracy=0.7875
+2026-05-16 20:07:33,838 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=644
+2026-05-16 20:18:30,870 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=813
+2026-05-16 20:18:46,330 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=577
