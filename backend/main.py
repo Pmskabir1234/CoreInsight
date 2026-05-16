@@ -47,7 +47,12 @@ def create_app() -> FastAPI:
 
     @app.get("/health")
     def health():
-        return {"status": "ok", "service": "innovexa-backend"}
+        return {
+            "status": "ok",
+            "service": "innovexa-backend",
+            "failure_model": ml.model_metadata.get("best_model"),
+            "failure_model_accuracy": ml.model_metadata.get("best_accuracy"),
+        }
 
     return app
 

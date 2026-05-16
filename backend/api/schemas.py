@@ -79,11 +79,3 @@ class SimulateResponse(BaseModel):
     simulated_risk: str
     impact_summary: str
 
-
-class ChatRequest(BaseModel):
-    machine_id: str
-    message: str
-
-
-class ChatResponse(BaseModel):
-    response: str

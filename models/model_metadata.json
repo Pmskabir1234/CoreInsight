@@ -1,0 +1,24 @@
+{
+  "best_model": "GradientBoosting",
+  "best_accuracy": 0.7875,
+  "all_scores": {
+    "RandomForest": 0.765,
+    "GradientBoosting": 0.7875,
+    "LogisticRegression": 0.7525,
+    "SVC": 0.735,
+    "KNeighbors": 0.76
+  },
+  "features": [
+    "vibration_rms",
+    "rpm",
+    "torque_nm",
+    "bearing_temp_c",
+    "ambient_temp_c",
+    "motor_current_a",
+    "voltage_v",
+    "flow_rate_l_min",
+    "pressure_bar",
+    "humidity_percent"
+  ],
+  "comparison_plot": "models\\model_accuracy_comparison.png"
+}

@@ -17,3 +17,14 @@
 2026-05-07 23:49:21,345 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=2922
 2026-05-07 23:49:55,221 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=2975
 2026-05-12 11:06:05,808 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=4300
+2026-05-16 12:19:20,436 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=5663
+2026-05-16 12:33:02,896 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=4700
+2026-05-16 12:56:50,887 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=3615
+2026-05-16 13:55:16,053 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=3470
+2026-05-16 20:02:07,371 INFO backend.ml.ml_flow model_trained name=RandomForest accuracy=0.7650
+2026-05-16 20:02:08,089 INFO backend.ml.ml_flow model_trained name=GradientBoosting accuracy=0.7875
+2026-05-16 20:02:08,107 INFO backend.ml.ml_flow model_trained name=LogisticRegression accuracy=0.7525
+2026-05-16 20:02:08,544 INFO backend.ml.ml_flow model_trained name=SVC accuracy=0.7350
+2026-05-16 20:02:08,571 INFO backend.ml.ml_flow model_trained name=KNeighbors accuracy=0.7600
+2026-05-16 20:02:09,805 INFO backend.ml.ml_flow saved_comparison_plot path=models\model_accuracy_comparison.png
+2026-05-16 20:02:09,813 INFO backend.ml.ml_flow best_model_selected name=GradientBoosting accuracy=0.7875

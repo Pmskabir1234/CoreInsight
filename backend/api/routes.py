@@ -9,8 +9,6 @@ from fastapi import APIRouter, HTTPException, Query
 from backend.api.schemas import (
     AnalyzeRequest,
     AnalyzeResponse,
-    ChatRequest,
-    ChatResponse,
     PredictResponse,
     SimulateRequest,
     SimulateResponse,
@@ -52,9 +50,13 @@ def create_router(ml: MLPipeline, store: HistoryStore) -> APIRouter:
 
     @router.post("/analyze", response_model=AnalyzeResponse)
     def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
-        values = payload.parameters.model_dump()
-        result = pipeline.run(machine_id=payload.machine_id, raw_values=values)
-        return AnalyzeResponse(**result)
+        try:
+            values = payload.parameters.model_dump()
+            result = pipeline.run(machine_id=payload.machine_id, raw_values=values)
+            return AnalyzeResponse(**result)
+        except Exception as exc:
+            logger.exception("analyze_failed machine_id=%s error=%s", payload.machine_id, exc)
+            raise HTTPException(status_code=500, detail="Analysis failed.") from exc
 
     @router.post("/simulate", response_model=SimulateResponse)
     def simulate(payload: SimulateRequest) -> SimulateResponse:
@@ -84,68 +86,5 @@ def create_router(ml: MLPipeline, store: HistoryStore) -> APIRouter:
         except Exception as exc:
             logger.exception("history_fetch_failed machine_id=%s error=%s", machine_id, exc)
             raise HTTPException(status_code=500, detail="History lookup failed.") from exc
-
-    @router.post("/chat", response_model=ChatResponse)
-    def chat(payload: ChatRequest) -> ChatResponse:
-        try:
-            from datetime import datetime, timezone
-
-            now = datetime.now(timezone.utc).isoformat()
-            latest = store.list_history(machine_id=payload.machine_id, limit=1)
-            latest_analysis = latest[0] if latest else {"message": "No analysis yet."}
-            structured = latest_analysis.get("structured_analysis", {})
-            cmd = payload.message.strip().lower()
-            if cmd.startswith("/history"):
-                response_lines = ["Recent trend context loaded from local history."]
-                for item in store.list_history(machine_id=payload.machine_id, limit=3):
-                    response_lines.append(
-                        f"- {item.get('created_at', 'n/a')}: risk={item.get('risk_category', 'n/a')} "
-                        f"failure={item.get('failure_probability_percent', 0):.2f}%"
-                    )
-                answer = "\n".join(response_lines)
-            elif cmd.startswith("/diagnostics"):
-                rows = structured.get("parameter_diagnostics", [])
-                if not rows:
-                    answer = "No diagnostics available yet. Run /analyze first."
-                else:
-                    critical = [r for r in rows if r.get("status") == "Critical"][:3]
-                    if critical:
-                        answer = "Priority diagnostics:\n" + "\n".join(
-                            [
-                                f"- {r['parameter']}: {r['deviation_percent']:.1f}% deviation ({r['status']})"
-                                for r in critical
-                            ]
-                        )
-                    else:
-                        answer = "All monitored parameters are currently within warning/normal bands."
-            elif cmd.startswith("/explain"):
-                causes = structured.get("root_cause_analysis", [])
-                answer = (
-                    "Root-cause insights:\n" + "\n".join([f"- {c}" for c in causes[:5]])
-                    if causes
-                    else "No root-cause analysis available yet. Run /analyze first."
-                )
-            elif cmd.startswith("/predict"):
-                answer = (
-                    f"Latest local risk estimate: {latest_analysis.get('failure_probability_percent', 0):.2f}% "
-                    f"with priority {latest_analysis.get('decision_priority', 'MONITOR')}."
-                )
-            elif cmd.startswith("/analyze"):
-                answer = "Use the Analyze button in the dashboard to run a fresh pipeline execution."
-            elif cmd.startswith("/simulate"):
-                answer = "Use the What-if Simulation panel to test parameter changes and risk impact."
-            else:
-                risk = latest_analysis.get("risk_category", "Unknown")
-                priority = latest_analysis.get("decision_priority", "MONITOR")
-                answer = (
-                    f"Local engineering assistant active. Current risk: {risk}, priority: {priority}. "
-                    "Try /diagnostics, /explain, /history, /predict, or /simulate."
-                )
-            store.save_chat(payload.machine_id, now, "user", payload.message)
-            store.save_chat(payload.machine_id, now, "assistant", answer)
-            return ChatResponse(response=answer)
-        except Exception as exc:
-            logger.exception("chat_failed machine_id=%s error=%s", payload.machine_id, exc)
-            raise HTTPException(status_code=500, detail="Chat failed.") from exc
 
     return router
