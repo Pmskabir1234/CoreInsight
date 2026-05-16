@@ -221,7 +221,7 @@ with st.sidebar:
     }
 
     st.divider()
-    st.subheader("API Actions")
+    st.subheader("Options")
     btn_analyze = st.button("Run Analysis", type="primary", use_container_width=True)
     btn_predict = st.button("Predict Failure", use_container_width=True)
     btn_history = st.button("Load History", use_container_width=True)
