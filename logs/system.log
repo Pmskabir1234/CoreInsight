@@ -31,3 +31,5 @@
 2026-05-16 20:07:33,838 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=644
 2026-05-16 20:18:30,870 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=813
 2026-05-16 20:18:46,330 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=577
+2026-05-18 14:13:03,182 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=2017
+2026-05-18 14:14:28,521 INFO backend.services.analysis_pipeline analyze_success machine_id=MOTOR-LINE-07 elapsed_ms=1666

@@ -7,3 +7,8 @@ data/*.db
 .DS_Store
 venv
 .env
+
+# JS frontend
+frontend-js/node_modules/
+frontend-js/dist/
+frontend-js/.env
