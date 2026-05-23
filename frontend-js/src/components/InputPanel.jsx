@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Cpu, Thermometer, Zap, Gauge, ChevronDown } from 'lucide-react'
-import clsx from 'clsx'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Cpu, Thermometer, Zap, Gauge, ChevronDown, RotateCcw } from 'lucide-react'
 
 const DEFAULT_PARAMS = {
   vibration_rms: 4.8,
@@ -19,39 +19,39 @@ const PARAM_GROUPS = [
   {
     label: 'Mechanical',
     icon: Cpu,
-    color: 'text-blue-500',
+    accent: '#22d3ee',
     fields: [
-      { key: 'vibration_rms',  label: 'Vibration RMS', unit: 'mm/s', min: 0,    max: 50,   step: 0.1 },
-      { key: 'rpm',            label: 'RPM',            unit: 'rpm',  min: 100,  max: 10000, step: 10 },
-      { key: 'torque_nm',      label: 'Torque',         unit: 'Nm',   min: 0,    max: 5000, step: 1 },
+      { key: 'vibration_rms',  label: 'Vibration RMS', unit: 'mm/s', min: 0,    max: 50,    step: 0.1 },
+      { key: 'rpm',            label: 'RPM',            unit: 'rpm',  min: 100,  max: 10000, step: 10  },
+      { key: 'torque_nm',      label: 'Torque',         unit: 'Nm',   min: 0,    max: 5000,  step: 1   },
     ],
   },
   {
     label: 'Thermal',
     icon: Thermometer,
-    color: 'text-orange-500',
+    accent: '#fb923c',
     fields: [
-      { key: 'bearing_temp_c', label: 'Bearing Temp',  unit: '°C', min: -20, max: 220, step: 0.5 },
-      { key: 'ambient_temp_c', label: 'Ambient Temp',  unit: '°C', min: -30, max: 80,  step: 0.5 },
+      { key: 'bearing_temp_c', label: 'Bearing Temp', unit: '°C', min: -20, max: 220, step: 0.5 },
+      { key: 'ambient_temp_c', label: 'Ambient Temp', unit: '°C', min: -30, max: 80,  step: 0.5 },
     ],
   },
   {
     label: 'Electrical',
     icon: Zap,
-    color: 'text-yellow-500',
+    accent: '#fbbf24',
     fields: [
-      { key: 'motor_current_a', label: 'Motor Current', unit: 'A',   min: 0,   max: 500,  step: 0.5 },
-      { key: 'voltage_v',       label: 'Voltage',       unit: 'V',   min: 100, max: 1000, step: 1 },
+      { key: 'motor_current_a', label: 'Motor Current', unit: 'A', min: 0,   max: 500,  step: 0.5 },
+      { key: 'voltage_v',       label: 'Voltage',       unit: 'V', min: 100, max: 1000, step: 1   },
     ],
   },
   {
     label: 'Process',
     icon: Gauge,
-    color: 'text-purple-500',
+    accent: '#c084fc',
     fields: [
-      { key: 'flow_rate_l_min',  label: 'Flow Rate',  unit: 'L/min', min: 0, max: 3000, step: 1 },
-      { key: 'pressure_bar',     label: 'Pressure',   unit: 'bar',   min: 0, max: 100,  step: 0.1 },
-      { key: 'humidity_percent', label: 'Humidity',   unit: '%',     min: 0, max: 100,  step: 0.5 },
+      { key: 'flow_rate_l_min',  label: 'Flow Rate', unit: 'L/min', min: 0, max: 3000, step: 1   },
+      { key: 'pressure_bar',     label: 'Pressure',  unit: 'bar',   min: 0, max: 100,  step: 0.1 },
+      { key: 'humidity_percent', label: 'Humidity',  unit: '%',     min: 0, max: 100,  step: 0.5 },
     ],
   },
 ]
@@ -59,41 +59,75 @@ const PARAM_GROUPS = [
 function GroupSection({ group, params, onChange }) {
   const [open, setOpen] = useState(true)
   const Icon = group.icon
+
   return (
-    <div className="space-y-2">
+    <div
+      className="rounded-xl overflow-hidden"
+      style={{ border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}
+    >
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 w-full text-left"
+        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-white/[0.02]"
       >
-        <Icon size={14} className={group.color} />
-        <span className="section-title">{group.label}</span>
-        <ChevronDown
-          size={12}
-          className={clsx('ml-auto text-slate-400 transition-transform duration-200', open && 'rotate-180')}
-        />
-      </button>
-      {open && (
-        <div className="space-y-2 pl-1">
-          {group.fields.map((f) => (
-            <div key={f.key}>
-              <label className="label" htmlFor={f.key}>
-                {f.label}
-                <span className="ml-1 text-slate-400 font-normal">({f.unit})</span>
-              </label>
-              <input
-                id={f.key}
-                type="number"
-                className="input-field"
-                value={params[f.key]}
-                min={f.min}
-                max={f.max}
-                step={f.step}
-                onChange={(e) => onChange(f.key, parseFloat(e.target.value) || 0)}
-              />
-            </div>
-          ))}
+        <div
+          className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+          style={{ background: `${group.accent}15` }}
+        >
+          <Icon size={11} style={{ color: group.accent }} />
         </div>
-      )}
+        <span
+          className="text-[11px] font-semibold tracking-wider uppercase flex-1"
+          style={{ color: '#64748b' }}
+        >
+          {group.label}
+        </span>
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+          <ChevronDown size={12} style={{ color: '#334155' }} />
+        </motion.div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="fields"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div
+              className="px-3 pb-3 pt-1 space-y-2.5"
+              style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}
+            >
+              {group.fields.map((f) => (
+                <div key={f.key}>
+                  <label
+                    className="label"
+                    htmlFor={f.key}
+                    style={{ color: '#334155' }}
+                  >
+                    {f.label}
+                    <span className="ml-1 normal-case font-normal" style={{ color: '#1e293b' }}>
+                      ({f.unit})
+                    </span>
+                  </label>
+                  <input
+                    id={f.key}
+                    type="number"
+                    className="input-field"
+                    value={params[f.key]}
+                    min={f.min}
+                    max={f.max}
+                    step={f.step}
+                    onChange={(e) => onChange(f.key, parseFloat(e.target.value) || 0)}
+                  />
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -113,7 +147,7 @@ export function InputPanel({ onParamsChange, machineId, onMachineIdChange }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Machine ID */}
       <div>
         <label className="label" htmlFor="machine-id">Machine ID</label>
@@ -127,16 +161,21 @@ export function InputPanel({ onParamsChange, machineId, onMachineIdChange }) {
         />
       </div>
 
-      <div className="h-px bg-slate-200 dark:bg-slate-700" />
+      <div className="divider" />
 
       {/* Parameter groups */}
-      <div className="space-y-4">
+      <div className="space-y-2">
         {PARAM_GROUPS.map((g) => (
           <GroupSection key={g.label} group={g} params={params} onChange={handleChange} />
         ))}
       </div>
 
-      <button onClick={handleReset} className="btn-ghost w-full justify-center text-xs">
+      <button
+        onClick={handleReset}
+        className="btn-ghost w-full justify-center gap-1.5 text-[11px]"
+        style={{ color: '#334155' }}
+      >
+        <RotateCcw size={11} />
         Reset to defaults
       </button>
     </div>
